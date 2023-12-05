@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>login with firebase</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<style>
+    main {
+        width: 100%;
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+</style>
+
+<body class="create-page">
+    <header></header>
+    <main>
+        <div class="login-wrapper">
+            <h1 style="margin-bottom: 1.5rem;">Create acount</h1>
+            <form>
+                <label for="fname">First name</label>
+                <input type="text" id="fname" name="fname">
+                <label for="lname">Last name</label>
+                <input type="text" id="lname" name="lname">
+                <label for="email">Email</label>
+                <input type="text" id="email" name="email">
+                <label for="pwd">Password</label>
+                <input type="password" name="pwd" id="pwd">
+                <button id="submitBtn">Submit</button>
+            </form>
+            <p style="margin-top: .5rem;">already have an account? <a href="login.html">Login</a></p>
+            <span style="color: red;" id="errorMessage"></span>
+        </div>
+    </main>
+
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
+
+
+    <script>
+        let firebaseConfig = {
+            apiKey: "AIzaSyA7u-vL-a9sbCjMEmj3pKTPOWXx8Pr8aJ4",
+            authDomain: "user-login-demo.firebaseapp.com",
+            projectId: "user-login-demo-3a32d",
+            // ...other configuration properties
+        };
+        firebase.initializeApp(firebaseConfig);
+
+
+        document.getElementById("submitBtn").addEventListener("click", function (event) {
+            event.preventDefault(); // Prevent form submission from reloading the page
+            let email = document.getElementById("email").value;
+            let password = document.getElementById("pwd").value;
+            let firstName = document.getElementById("fname").value;
+            let lastName = document.getElementById("lname").value;
+
+
+            // Create user account using Firebase Authentication
+            firebase.auth().createUserWithEmailAndPassword(email, password)
+                .then(function (userCredential) {
+                    // Update the user profile with first and last name
+                    return userCredential.user.updateProfile({
+                        displayName: firstName + " " + lastName
+                    })
+                })
+
+                .then(function () {
+                    console.log("User data stored successfully");
+                    // Registration successful, redirect to home.html
+                    window.location.href = "home.html";
+                })
+                .catch(function (error) {
+                    console.log("Error storing user data:", error);
+                })
+                .catch(function (error) {
+                    // Handle error
+                    let errorCode = error.code;
+                    let errorMessage = error.message;
+                    console.error("Error creating user account:", errorMessage);
+                    // Additional code to handle error, display error message, etc.
+                    const uiErrorMessage = document.getElementById('errorMessage');
+                    uiErrorMessage.innerText = errorMessage;
+
+                });
+        });
+
+
+    </script>
+
+
+</body>
+
+</html>

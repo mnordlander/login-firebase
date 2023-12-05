@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<style>
+    header {
+        width: 100%;
+    }
+
+    main {
+        width: 100%;
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+</style>
+
+<body id="login-page">
+    <header>
+        <span> </span>
+        <a href="create.html"><button id="sign-up-btn">Sign up</button></a>
+    </header>
+
+    <main>
+        <div class="login-wrapper">
+            <h1 style="margin-bottom: 1.5rem;">Login</h1>
+            <form>
+                <label for="email">Email</label>
+                <input type="text" id="email" name="email">
+                <label for="pwd">Password</label>
+                <input type="password" name="pwd" id="pwd">
+                <span style="color: red; margin-top: 1rem;" id="loginErrorMessage"></span>
+                <button id="submitBtn">Submit</button>
+            </form>
+        </div>
+    </main>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+    <script src="fb-config.js"></script>
+    <script>
+
+        // Check if the user is already authenticated
+        firebase.auth().onAuthStateChanged(function (user) {
+            if (user) {
+                window.location.href = "home.html"; // Redirect to home.html
+            }
+        });
+
+        document.getElementById("submitBtn").addEventListener("click", function (event) {
+            event.preventDefault(); // Prevent form submission from reloading the page
+            var email = document.getElementById("email").value;
+            var password = document.getElementById("pwd").value;
+            const htmlBody = document.getElementById('login-page');
+            // Sign in the user with email and password
+            firebase.auth().signInWithEmailAndPassword(email, password)
+                .then(function () {
+                    htmlBody.style.background = '#122814';
+                    setTimeout(() => {
+                        // User is successfully logged in, redirect to home.html
+                        window.location.href = "home.html";
+                    }, 1500);
+                })
+                .catch(function (error) {
+                    // Handle error
+                    var errorCode = error.code;
+                    var errorMessage = error.message;
+                    const loginErrorMessage = document.getElementById('loginErrorMessage');
+                    console.error("Error occurred during login:", errorMessage);
+                    var errCode = errorCode.substring(5).replace("-", " ");
+
+                    console.log(errorCode);
+                    loginErrorMessage.innerText = errCode.charAt(0).toUpperCase() + errCode.slice(1);
+                    // Additional code to handle error, display error message, etc.
+                    htmlBody.style.background = '#301111';
+                });
+        });
+    </script>
+
+</body>
+
+</html>

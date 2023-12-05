@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<style>
+    html,
+    body {
+        height: unset !important;
+    }
+</style>
+
+<body>
+    <div id="home-page">
+        <header>
+            <h1 id="welcomeMessage"></h1>
+
+            <div class="header-button-wrapper">
+                <a href="members.html"><button>Members</button></a>
+                <button id="logout">Logout</button>
+            </div>
+        </header>
+
+        <main>
+            <h1 style="margin-bottom: 3rem;">movies</h1>
+            <div id="movie-wrapper"></div>
+        </main>
+    </div>
+    <div class="next-page-wrapper">
+        <button onclick="nextMoviePage(1);">1</button>
+        <button onclick="nextMoviePage(2);">2</button>
+        <button onclick="nextMoviePage(3);">3</button>
+        <button onclick="nextMoviePage(4);">4</button>
+        <button onclick="nextMoviePage(5);">5</button>
+
+    </div>
+
+
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
+
+    <script src="fb-config.js"></script>
+    <script>
+        function redirectIfNotAuthenticated() {
+            firebase.auth().onAuthStateChanged(function (user) {
+                if (!user) {
+                    // User is not signed in, redirect to login.html
+                    window.location.href = "login.html";
+                }
+            });
+        }
+
+        // Call the function to redirect if not authenticated
+        redirectIfNotAuthenticated();
+
+
+
+
+    </script>
+    <script src="script.js"></script>
+    <script src="tmdb-api.js"></script>
+</body>
+
+</html>
